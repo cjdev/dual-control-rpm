@@ -10,5 +10,5 @@
 
 ## How to build an RPM
 
-TBD
+0. run `package-rpm.sh`
 
