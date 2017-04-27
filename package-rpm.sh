@@ -1,17 +1,36 @@
 #!/bin/bash
 
+VERSION=$1
 
-# get source code archive
-# rpmbuild -ba ....
+if [ -z "$VERSION" ]; then
+  echo "version required"
+  exit 3
+fi
 
-VERSION=0.0.2
+origtar=$(mktemp)
 
 curl -L \
    https://api.github.com/repos/cjdev/dual-control/tarball/release-${VERSION} \
-   > ~/rpmbuild/SOURCES/dual-control-${VERSION}.tar.gz
+   > "$origtar"
 
-rpmbuild -ba $(dirname $0)/dual-control.spec
+workdir=$(mktemp -d)
+pushd "$workdir"
+tar -xzvf "$origtar"
+prefix=dual-control-${VERSION}
+mv * "$prefix"
+tar -czvf ~/rpmbuild/SOURCES/dual-control-${VERSION}.tar.gz "$prefix"
+popd
+
+spec=$(mktemp)
+sed "s/^Version:.*$/Version: ${VERSION}/" "$(dirname $0)/dual-control.spec" > "$spec"
+
+
+rpmbuild -ba "$spec"
 
 cp ~/rpmbuild/RPMS/x86_64/dual-control-${VERSION}-0.x86_64.rpm $(dirname $0)/
 
+rm -rf "$origtar" "$workdir" "$spec"
+echo $spec
+echo $origtar
+echo $workdir
 
