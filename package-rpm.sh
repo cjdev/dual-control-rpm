@@ -30,7 +30,4 @@ rpmbuild -ba "$spec"
 cp ~/rpmbuild/RPMS/x86_64/dual-control-${VERSION}-0.x86_64.rpm $(dirname $0)/
 
 rm -rf "$origtar" "$workdir" "$spec"
-echo $spec
-echo $origtar
-echo $workdir
 

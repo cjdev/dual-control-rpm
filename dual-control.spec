@@ -33,6 +33,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 %files
 %defattr(-,root,root)
-%doc README.md COPYING
+%doc README.md LICENSE
 /lib64/security/pam_dual_control.so
 
