@@ -4,17 +4,14 @@
 # get source code archive
 # rpmbuild -ba ....
 
-VERSION=0.0.1
+VERSION=0.0.2
 
-git archive \
-   --remote git@github.com:cjdev/dual-control.git \
-   --prefix dual-control-${VERSION}/ \
-   --format tar.gz \
-   -o ~/rpmbuild/SOURCES/dual-control-${VERSION}.tar.gz \
-   release-${VERSION}
+curl -L \
+   https://api.github.com/repos/cjdev/dual-control/tarball/release-${VERSION} \
+   > ~/rpmbuild/SOURCES/dual-control-${VERSION}.tar.gz
 
 rpmbuild -ba $(dirname $0)/dual-control.spec
 
-cp ~/rpmbuild/RPMS/x86_64/dual-control-0.0.1-0.x86_64.rpm $(dirname $0)/
+cp ~/rpmbuild/RPMS/x86_64/dual-control-${VERSION}-0.x86_64.rpm $(dirname $0)/
 
 
