@@ -1,13 +1,13 @@
 - name: setup environment for dual control
   hosts: all
   vars:
-    package_version:  dev
+    package_version:  0.1.2
   tasks:
     - name: install dependencies
       become: true
       become_user: root
       yum:
-        name: git,openssl-devel,pam-devel
+        name: git,openssl-static,openssl-devel,pam-devel,tmux
         state: latest
     - name: get rpm-builder source
       become: true
