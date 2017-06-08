@@ -2,18 +2,18 @@
 
 ## Ansible + Vagrant Setup
 
-If you have ansible and vagrant available, `vagrant up` should setup a
-virtual machine configured for dual control authentication. Just sudo as eng1 (password the same as the username) and then try to sudo from the eng1 account.  Log in as the eng2 user to obtain a dual control token.
+If you have ansible and vagrant available, the following steps will
+setup a working installation of the pam module.
 
 - In one terminal:
-	- `vagrant up`
-	- `ssh -p 2222 eng2@localhost` password: eng2
-	- `dual_control` to create a token
+  - `vagrant up`
+  - `ssh -p 2222 eng2@localhost` password: eng2
+  - `dual_control` to create a token
 - In another terminal:
-	- `ssh -p 2222 eng1@localhost` password: eng1
-	- `sudo bash` password: eng1
-	- When prompted enter `eng2:<dual control token from above>`
-	- When prompted enter reason for superuser access
+  - `ssh -p 2222 eng1@localhost` password: eng1
+  - `sudo bash` password: eng1
+  - When prompted enter `eng2:<dual control token from above>`
+  - When prompted enter reason for superuser access
 
 ## Manual Setup
 
