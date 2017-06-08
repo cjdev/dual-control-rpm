@@ -1,0 +1,69 @@
+- name: setup environment for dual control
+  hosts: all
+  vars:
+    package_version:  dev
+  tasks:
+    - name: install dependencies
+      become: true
+      become_user: root
+      yum:
+        name: git,openssl-devel,pam-devel
+        state: latest
+    - name: get rpm-builder source
+      become: true
+      become_user: vagrant
+      synchronize:
+        src: .
+        dest: /home/vagrant/dual-control-rpm
+    - name: run setup script
+      become: true
+      become_user: vagrant
+      shell: ./setup.sh
+      args:
+        chdir: /home/vagrant/dual-control-rpm
+    - name: package rpm
+      become: true
+      become_user: vagrant
+      shell: ./package-rpm.sh {{ package_version }}
+      args:
+        chdir: /home/vagrant/dual-control-rpm
+    - name: install rpm
+      become: true
+      become_user: root
+      yum:
+        name: /home/vagrant/dual-control-rpm/dual-control-{{ package_version}}-0.x86_64.rpm
+        state: present
+    - name: setup sudo
+      become: true
+      become_user: root
+      template:
+        src: templates/sudo_pam_conf
+        dest: /etc/pam.d/sudo
+    - name: add test user eng1 with password eng1
+      become: true
+      become_user: root
+      user:
+        name: eng1
+        password: $6$JcpEoOGX.xW/bOUb$GcQiSnlsonSvplw/h.jOiUYOVV4VfW2dekV3RRtlk9PRo26X9n0V4fQFrxtu0byRmMosA6Oqpx9.s157YhD0h0
+        groups: wheel
+    - name: add test user eng2 with password eng2
+      become: true
+      become_user: root
+      user:
+        name: eng2
+        password: $6$2ItCSX9i8LKQjye5$asdarK0N.hbQI5/XXgUgtm1UQWySBd0HVCetN2Lrf5I7/.iORdNKZiWhdw0bHLav3ENbZwuOJ9l/vtcN3q8gH/
+        groups: wheel
+    - name: fix sshd configuration
+      become: true
+      become_user: root
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#PasswordAuthentication.*$'
+        line: 'PasswordAuthentication yes'
+      notify: restart ssh
+  handlers:
+    - name: restart ssh
+      become: true
+      become_user: root
+      service: name=sshd state=restarted
+        

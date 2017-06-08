@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu -o pipefail
 
 VERSION=$1
 
@@ -9,9 +10,15 @@ fi
 
 origtar=$(mktemp)
 
-curl -L \
-   https://api.github.com/repos/cjdev/dual-control/tarball/release-${VERSION} \
-   > "$origtar"
+if [[ $VERSION != "dev" ]]; then
+  curl -L \
+    https://api.github.com/repos/cjdev/dual-control/tarball/release-${VERSION} \
+    > "$origtar"
+else
+  curl -L \
+    https://api.github.com/repos/cjdev/dual-control/tarball/master \
+    > "$origtar"
+fi
 
 workdir=$(mktemp -d)
 pushd "$workdir"
