@@ -13,8 +13,16 @@
       become: true
       become_user: vagrant
       synchronize:
-        src: .
+        src: ./
         dest: /home/vagrant/dual-control-rpm
+    - name: fix permissions
+      become: true
+      become_user: root
+      file:
+        path: /home/vagrant/dual-control-rpm
+        owner: vagrant
+        group: vagrant
+        recurse: true
     - name: run setup script
       become: true
       become_user: vagrant
