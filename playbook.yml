@@ -1,7 +1,7 @@
 - name: setup environment for dual control
   hosts: all
   vars:
-    package_version:  dev
+    package_version:  0.2.0
   tasks:
     - name: uninstall old version
       become: true
