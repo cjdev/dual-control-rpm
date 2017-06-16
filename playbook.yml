@@ -1,8 +1,14 @@
 - name: setup environment for dual control
   hosts: all
   vars:
-    package_version:  0.1.2
+    package_version:  dev
   tasks:
+    - name: uninstall old version
+      become: true
+      become_user: root
+      yum:
+        name: dual-control
+        state: absent
     - name: install dependencies
       become: true
       become_user: root
@@ -74,4 +80,3 @@
       become: true
       become_user: root
       service: name=sshd state=restarted
-        
