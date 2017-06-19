@@ -6,9 +6,12 @@ If you have ansible and vagrant available, the following steps will
 setup a working installation of the pam module.
 
 - In one terminal:
-  - `vagrant up`
+  - `vagrant up` (will use vagrant to setup the vm and ansible to provision it)
   - `ssh -p 2222 eng2@localhost` password: eng2
-  - `dual_control` to create a token
+  - `dual_control` to create a key / sample token
+  - Scan the qr code with your authenticator app and make sure things match.
+    *Note* that this is clock-sensitive, so if they don't match, check your
+    computer's clock.
 - In another terminal:
   - `ssh -p 2222 eng1@localhost` password: eng1
   - `sudo bash` password: eng1
